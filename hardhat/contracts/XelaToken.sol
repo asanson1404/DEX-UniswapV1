@@ -16,9 +16,9 @@ pragma solidity ^0.8.18;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract XelaToken is ERC20 {
-    // Mint 1 million Xela Tokens for the smart contract creator
-    constructor() ERC20("XelaToken", "XLT") {
+contract Xela is ERC20 {
+    // Mint 1 million Xela for the smart contract creator
+    constructor() ERC20("Xela", "XLA") {
         _mint(msg.sender, 1_000_000 * 10 ** decimals());
     }
 }
