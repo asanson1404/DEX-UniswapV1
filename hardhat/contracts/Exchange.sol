@@ -77,5 +77,23 @@ contract Exchange is ERC20 {
         return (ethToReturn, xelaToReturn);
     }
 
+    // Calculates the amount of output tokens to be received based on the equation 
+    // x * y = (x + dx)(y - dy) 
+    function getOutputAmountFromSwap(
+        uint256 xReserve,
+        uint256 yReserve,
+        uint256 xAdded
+    ) public pure returns(uint256) {
+
+        require(xReserve > 0 && yReserve > 0, "RESERVES_MUST_BE_GREATER_THAN_0");
+
+        uint256 xAddedWithFees = xAdded * 99;
+
+        uint256 numerator = (yReserve * xAddedWithFees);
+        uint256 denominator = (xReserve * 100) + xAddedWithFees;
+
+        return numerator / denominator;
+    }
+
 
 }
