@@ -18,24 +18,40 @@ contract Exchange is ERC20 {
         return ERC20(xelaTokenAddress).balanceOf(address(this));
     }
 
-    // Allow a user to add liquidity to the exchange
-    function addLiquidity(uint256 amountOfXela) external payable {
+    // Allow users to add liquidity to the exchange
+    function addLiquidity(uint256 amountOfXela) external payable returns(uint256){
+
+        IERC20 xelaInst = ERC20(xelaTokenAddress);
 
         uint256 xelaReserve = getXelaReserve();
+        uint256 ethReserve  = address(this).balance; 
+        uint256 lpTokenToMint;
 
         // If pools are empty, the first LP set the ratio of tokens
         if (xelaReserve == 0) {
-            IERC20 xelaInst = ERC20(xelaTokenAddress);
-            xelaInst.transferFrom(xelaTokenAddress, address(this), amountOfXela);
-        }
-        else {
-            uint256 ethReserve = address(this).balance - msg.value;
-            uint256 rightXelaAmount = (msg.value * xelaReserve) / ethReserve;
-            require(amountOfXela >= rightXelaAmount, "INCORRECT_RATIO_OF_XELA_PROVIDED");
-            IERC20 xelaInst = ERC20(xelaTokenAddress);
-            xelaInst.transferFrom(xelaTokenAddress, address(this), rightXelaAmount);
+            // Transfer Xela from the user to the Exchange
+            xelaInst.transferFrom(msg.sender, address(this), amountOfXela);
 
+            // Mint LP Token to the user
+            lpTokenToMint = ethReserve; // = msg.value
+            _mint(msg.sender, lpTokenToMint);
+
+            return lpTokenToMint;
         }
+
+        // If pools are not empty, calculate the right amount of Token to get the same pool ratio
+        uint256 ethReservePriorToFunctionCall = ethReserve - msg.value;
+        uint256 rightXelaAmount = (msg.value * xelaReserve) / ethReservePriorToFunctionCall;
+        require(amountOfXela >= rightXelaAmount, "INSUFFICIENT_AMOUNT_OF_XELA_PROVIDED");
+
+        // Transfer Xela from the user to the Exchange
+        xelaInst.transferFrom(msg.sender, address(this), rightXelaAmount);
+
+        // Calculate and mint the amount of LP Token for the user
+        lpTokenToMint = (msg.value * totalSupply()) / ethReservePriorToFunctionCall;
+        _mint(msg.sender, lpTokenToMint);
+
+        return lpTokenToMint;
     }
 
 
