@@ -95,5 +95,44 @@ contract Exchange is ERC20 {
         return numerator / denominator;
     }
 
+    // Allow user to swap ETH (input) for Xela (output)
+    function ethToXelaSwap(uint256 minXelaToReceive) public payable {
+        
+        uint256 inputReservePriorToFunctionCall = address(this).balance - msg.value;
+        uint256 outputReserve = getXelaReserve();
+
+        // Calculate the number of Xela to receive
+        uint256 outputAmount = getOutputAmountFromSwap(
+            inputReservePriorToFunctionCall,
+            outputReserve,
+            msg.value
+        );
+
+        require(outputAmount >= minXelaToReceive, "Xela received are less than minimum Xela expected");
+
+        ERC20(xelaTokenAddress).transfer(msg.sender, outputAmount);
+
+        
+    }
+
+    // Allow user to swap Xela (input) for ETH (output)
+    function XelaToEthSwap(uint256 xelaToSwap, uint256 minEthToReceive) public {
+        
+        uint256 inputReserve = getXelaReserve();
+        uint256 outputReserve = address(this).balance;
+
+        // Calculate the number of ETH to receive
+        uint256 outputAmount = getOutputAmountFromSwap(
+            inputReserve,
+            outputReserve,
+            xelaToSwap
+        );
+
+        require(outputAmount >= minEthToReceive, "ETH received are less than minimum ETH expected");
+
+        ERC20(xelaTokenAddress).transferFrom(msg.sender, address(this), xelaToSwap);
+
+        payable(msg.sender).transfer(outputAmount);
+    }
 
 }
