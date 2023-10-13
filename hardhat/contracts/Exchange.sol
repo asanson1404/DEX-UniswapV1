@@ -54,5 +54,28 @@ contract Exchange is ERC20 {
         return lpTokenToMint;
     }
 
+    // Allow users to remove liquidity from exchange and get back its tokens
+    function removeLiquidity(uint256 amountOfLpTokens) external returns(uint256, uint256) {
+        
+        require(amountOfLpTokens > 0, "AMOUNT_OF_TOKENS_TO_REMOVE_MUST_BE_GREATER_THAN_0");
+
+        uint256 totalLpTokenSupply = totalSupply();
+        uint256 xelaReserve = getXelaReserve();
+        uint256 ethReserve  = address(this).balance;
+
+        // Calculate the amount of ETH and XELA to return to the user
+        uint256 ethToReturn  = ethReserve * (amountOfLpTokens / totalLpTokenSupply);
+        uint256 xelaToReturn = xelaReserve * (amountOfLpTokens / totalLpTokenSupply);
+
+
+        // _burn() verifies that msg.sender has a sufficient amount of LP Token
+        _burn(msg.sender, amountOfLpTokens);
+        // Transfer ETH and XELA to the user
+        payable(msg.sender).transfer(ethToReturn);
+        ERC20(xelaTokenAddress).transfer(msg.sender, xelaToReturn);
+
+        return (ethToReturn, xelaToReturn);
+    }
+
 
 }
