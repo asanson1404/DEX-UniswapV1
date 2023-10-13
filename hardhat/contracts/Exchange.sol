@@ -1,4 +1,21 @@
 // SPDX-License-Identifier: MIT
+
+//==================================================>
+    // Realised by Alexandre Sanson the 10/13/2023
+    // Inspired from learnweb3.io
+//==================================================>
+
+/*
+    This contract builds an exchange that allows swapping ETH <> XELA
+    It simulate the behavior of a DEX which works with AMMs (like Uniswap V1):
+        - the DEX charges a 1% fee on swaps
+        - When user adds liquidity, they are given a LP Token that represents their share of the pool
+        - Liquidity Providers must be able to burn their LP tokens to receive back ETH and XELA  
+
+    Smart Contract Address on Sepolia testnet : 0xb671ac5EE34786857F46b275B374F3Cf1Aa5e22E
+    https://sepolia.etherscan.io/ : https://sepolia.etherscan.io/address/0xb671ac5EE34786857F46b275B374F3Cf1Aa5e22E
+
+*/
 pragma solidity ^0.8.18;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
