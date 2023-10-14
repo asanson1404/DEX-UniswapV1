@@ -17,6 +17,26 @@
   min-height: 100vh;
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+}
+
+.image {
+  filter: invert(1) drop-shadow(0 0 0.3rem #ffffff70);
+  width: 10rem;
+}
+
+.containera {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5rem;
+  margin-bottom: 10rem;
+}
+
 .description {
   display: inherit;
   justify-content: inherit;
@@ -50,7 +70,9 @@
 }
 
 .grid {
-  display: grid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   grid-template-columns: repeat(4, minmax(25%, auto));
   max-width: var(--max-width);
   width: 100%;
@@ -87,28 +109,29 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: 4rem 0;
+  padding: 1rem 0;
+  margin-bottom: -5rem;
 }
 
 .center::before {
   background: var(--secondary-glow);
-  border-radius: 50%;
+  border-radius: 30%;
   width: 480px;
-  height: 360px;
+  height: 300px;
   margin-left: -400px;
 }
 
 .center::after {
   background: var(--primary-glow);
   width: 240px;
-  height: 180px;
+  height: 200px;
   z-index: -1;
 }
 
 .center::before,
 .center::after {
   content: '';
-  left: 50%;
+  left: 40%;
   position: absolute;
   filter: blur(45px);
   transform: translateZ(0);
@@ -165,7 +188,8 @@
   }
 
   .center {
-    padding: 8rem 0 6rem;
+    padding: 3rem 0 0rem;
+    margin-bottom: 0;
   }
 
   .center::before {
