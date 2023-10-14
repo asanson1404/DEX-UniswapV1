@@ -1,5 +1,36 @@
-import '@/styles/globals.css'
+import '@/styles/globals.css';
+import '@rainbow-me/rainbowkit/styles.css';
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
+import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import { sepolia } from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
+
+const { chains, publicClient } = configureChains(
+  [sepolia],
+  [publicProvider()]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: 'Xela Exchange',
+  projectId: '6e8e88ca2d45e9790c40e82dbe4462a5',
+  chains,
+});
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient,
+});
+
+function App({ Component, pageProps }) {
+  return (
+    <WagmiConfig config={wagmiConfig}>
+      <RainbowKitProvider chains={chains}>
+        <Component {...pageProps} />
+      </RainbowKitProvider>
+    </WagmiConfig>
+  )
 }
+
+export default App;
