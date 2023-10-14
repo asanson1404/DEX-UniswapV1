@@ -7,6 +7,10 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
+
+  var c;
+
   return (
     <>
       <Head>
@@ -34,23 +38,27 @@ export default function Home() {
 
 
         <div className={styles.container}>
-          <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              className={styles.card}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h2>
-                Learn <span>-&gt;</span>
-              </h2>
-              <p>
-                Learn about Next.js in an interactive course with&nbsp;quizzes!
-              </p>
-          </a>
+          <div className={styles.actiondiv}>
+            <div className={styles.subContainer}>
+              <p>You pay</p>
+              <div className={styles.subsubContainer}>
+                <input className={styles.input} type="number" placeholder="0"></input>
+                <button className={styles.inUnit}><b>XELA </b><div className={styles.arrowDown}></div></button>
+              </div>
+            </div>
+            <div className={styles.subContainer}>
+              <p>You receive</p>
+              <div className={styles.subsubContainer}>
+                <input className={styles.input} type="number" placeholder="0" value={c}></input>
+                <button className={styles.outUnit}><b>ETH</b></button>
+              </div>
+            </div>
+
+            <button className={styles.swap}>Swap</button>
+          </div>
         </div>
 
         <div className={styles.containera}>
-          <image src="/vercel.svg"></image>
           <a
               href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
               className={styles.card}

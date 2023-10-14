@@ -1,7 +1,7 @@
 import '@/styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 
-import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider, getDefaultWallets, lightTheme } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
@@ -26,7 +26,12 @@ const wagmiConfig = createConfig({
 function App({ Component, pageProps }) {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider chains={chains} theme={lightTheme({
+        accentColor: '#5f29d470',
+        accentColorForeground: 'white',
+        borderRadius: 'large',
+        fontStack: 'system', 
+      })}>
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>

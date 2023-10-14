@@ -19,14 +19,110 @@
 
 .container {
   display: flex;
+  background-color: rgb(10, 9, 9);
+  width: 25rem;
+  height: 18rem;
   justify-content: center;
+  border: 1px solid #ffffff70;
+  border-radius: 10px;
   margin-top: 5rem;
   margin-bottom: 3rem;
+  z-index: 1;
 }
 
-.image {
-  filter: invert(1) drop-shadow(0 0 0.3rem #ffffff70);
-  width: 10rem;
+.actiondiv {
+  display: flex;
+  flex-direction: column;
+  padding: 5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.subContainer {
+  width: 24rem;
+  height: 5rem;
+  margin-bottom: 0.3rem;
+  background-color: rgb(30, 26, 26);
+  border: 1px solid #22181870;
+  border-radius: 15px;
+}
+
+.subContainer > p {
+  font-size: 0.8rem;
+  color: gray;
+  margin-top: 0.2rem;
+  margin-left: 0.5rem;
+}
+
+.subsubContainer {
+  display: flex;
+  align-items: center;
+}
+
+.subContainer > input,
+.subsubContainer > input {
+  outline: none;
+  margin-left: 0.5rem;
+  font-size: 2rem;
+  width: 60%;
+  background-color: transparent;
+  border: none;
+  color: wheat;
+}
+
+.subContainer > input::placeholder,
+.subsubContainer > input::placeholder {
+  color: gray;
+}
+
+.inUnit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 1.5rem;
+  width: 5rem;
+  margin-left: 3rem;
+  border: 1px solid #5b585870;
+  border-radius: 25px;
+  background-color: #5f29d470;
+  padding: 0.5rem;
+}
+
+.outUnit {
+  height: 1.5rem;
+  width: 5rem;
+  margin-left: 3rem;
+  border: 1px solid #5b585870;
+  border-radius: 25px;
+  background-color: #5f29d470;
+}
+
+.arrowDown {
+  width: 1rem;
+  height: 0.8rem;
+  background-color: #d4d1c4;
+  clip-path: polygon(100% 0, 0 0, 50% 100%);
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+.swap {
+  height: 2.5rem;
+  font-weight: bold;
+  background-color: #5f29d470;
+  border: 1px solid #22181870;
+  border-radius: 10px;
+}
+
+.swap:hover {
+  background-color: #6e4eb270;
 }
 
 .containera {
