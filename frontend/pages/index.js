@@ -3,11 +3,14 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import DropDownButton from '../components/DropDownButton'
+import { useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
 
+  const [selectedToken, setSelectedToken] = useState('XLA'); 
 
   var c;
 
@@ -16,7 +19,7 @@ export default function Home() {
       <Head>
         <title>Xela Exchange</title>
         <meta name="description" content="Exchange to swap XELA <> ETH" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/sd-logo-det.ico" />
       </Head>
 
       <div className={styles.connectButton}>
@@ -36,21 +39,20 @@ export default function Home() {
           />
         </div>
 
-
         <div className={styles.container}>
           <div className={styles.actiondiv}>
             <div className={styles.subContainer}>
               <p>You pay</p>
               <div className={styles.subsubContainer}>
                 <input className={styles.input} type="number" placeholder="0"></input>
-                <button className={styles.inUnit}><b>XELA </b><div className={styles.arrowDown}></div></button>
+                <DropDownButton selectedToken={selectedToken} setSelectedToken={setSelectedToken} />
               </div>
             </div>
             <div className={styles.subContainer}>
               <p>You receive</p>
               <div className={styles.subsubContainer}>
                 <input className={styles.input} type="number" placeholder="0" value={c}></input>
-                <button className={styles.outUnit}><b>ETH</b></button>
+                <button className={styles.outUnit}><b>{selectedToken === 'XLA' ? 'ETH' : 'XLA'}</b></button>
               </div>
             </div>
 
