@@ -28,6 +28,9 @@ export default function Home() {
           <Link href="/" className={styles.link}>
             <p>Swap</p>  
           </Link>
+          <Link href="/pool" className={styles.link}>
+            <p>Pool</p>  
+          </Link>
           <Link href="/mint" className={styles.link}>
             <p>Mint</p>  
           </Link>

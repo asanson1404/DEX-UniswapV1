@@ -1,0 +1,32 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 4rem;
+    padding-right: 7rem;
+    align-items: center;
+    margin-top: 1.8rem;
+  }
+  
+  .pages {
+    display: flex;
+    color: bisque;
+  }
+  
+  .link {
+    margin-right: 2rem;
+  }
+  .link:hover {
+    color: rgb(247, 158, 49);
+  }
+  
+  .container {
+      text-align: center;
+      padding: 10rem;
+  }
+  .title {
+    font-size: 2rem;
+  }
+  .description {
+      font-size: 1rem;
+      line-height: 2rem;
+    }
