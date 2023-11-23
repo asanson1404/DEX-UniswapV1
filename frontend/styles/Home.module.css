@@ -1,11 +1,22 @@
-.connectButton {
+.header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  padding-left: 4rem;
+  padding-right: 7rem;
   align-items: center;
-  position: absolute;
-  top: 0rem;
-  right: 0rem;
-  padding: 2rem;
+  margin-top: 1.8rem;
+}
+
+.pages {
+  display: flex;
+  color: bisque;
+}
+
+.link {
+  margin-right: 2rem;
+}
+.link:hover {
+  color: rgb(247, 158, 49);
 }
 
 .main {
@@ -13,7 +24,6 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 6rem;
   min-height: 100vh;
 }
 
@@ -239,13 +249,6 @@
 /* Mobile */
 @media (max-width: 700px) {
 
-  .connectButton {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
   .content {
     padding: 4rem;
   }
@@ -326,12 +329,6 @@
 @media (min-width: 701px) and (max-width: 1120px) {
   .grid {
     grid-template-columns: repeat(2, 50%);
-  }
-  .connectButton {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
   }
 
 }

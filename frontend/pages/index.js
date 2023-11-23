@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
@@ -22,8 +23,16 @@ export default function Home() {
         <link rel="icon" href="/sd-logo-det.ico" />
       </Head>
 
-      <div className={styles.connectButton}>
-          <ConnectButton showBalance={false}/>
+      <div className={`${styles.header} ${inter.className}`}>
+        <div className={styles.pages}>
+          <Link href="/" className={styles.link}>
+            <p>Swap</p>  
+          </Link>
+          <Link href="/mint" className={styles.link}>
+            <p>Mint</p>  
+          </Link>
+        </div>
+        <ConnectButton showBalance={false}/>
       </div>
 
       <main className={`${styles.main} ${inter.className}`}>

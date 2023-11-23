@@ -1,0 +1,35 @@
+import React from "react";
+import { Inter } from 'next/font/google'
+import Link from "next/link";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import styles from '../styles/Mint.module.css'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export default function About(){
+    return(
+
+        <>
+        
+        <div className={`${styles.header} ${inter.className}`}>
+            <div className={styles.pages}>
+                <Link href="/" className={styles.link}>
+                    <p>Swap</p>  
+                </Link>
+                <Link href="/mint" className={styles.link}>
+                    <p>Mint</p>  
+                </Link>
+            </div>
+            <ConnectButton showBalance={false}/>
+        </div>
+
+        <div className={styles.container}>
+            <h2 className={styles.title}>About Page</h2>
+            <p className={styles.description}>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            </p>
+        </div>
+        </>
+
+    )
+}
