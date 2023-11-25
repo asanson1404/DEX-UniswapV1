@@ -1,32 +1,139 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    padding-left: 4rem;
-    padding-right: 7rem;
-    align-items: center;
-    margin-top: 1.8rem;
-  }
+  display: flex;
+  justify-content: space-between;
+  padding-left: 4rem;
+  padding-right: 7rem;
+  align-items: center;
+  margin-top: 1.8rem;
+}
+
+.pages {
+  display: flex;
+  color: bisque;
+}
   
-  .pages {
-    display: flex;
-    color: bisque;
-  }
+.link {
+  margin-right: 2rem;
+}
+.link:hover {
+  color: rgb(247, 158, 49);
+}
   
-  .link {
-    margin-right: 2rem;
-  }
-  .link:hover {
-    color: rgb(247, 158, 49);
-  }
-  
-  .container {
-      text-align: center;
-      padding: 10rem;
-  }
-  .title {
-    font-size: 2rem;
-  }
-  .description {
-      font-size: 1rem;
-      line-height: 2rem;
-    }
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.textContainer {
+  margin-top: 6rem;
+  text-align: center;
+  filter: drop-shadow(0 0 0.3rem rgba(255, 0, 191, 0.725));
+}
+.textContainer > h2 {
+  font-size: 2rem;
+}
+.textContainer > h3 {
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+.poolsText {
+  margin-top: 5rem;
+  margin-left: 1.5rem;
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-align: left;
+  color: rgb(157, 151, 151);
+}
+
+.container {
+  height: 25rem;
+  width: 60rem;
+  border-radius: 40px;
+  border: 1px solid gray;
+  background-color: rgb(38, 7, 25);
+  box-shadow:
+        0rem -0.5rem 200px 20px rgba(143, 1, 108, 0.7);
+}
+
+.poolName {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: bisque;
+}
+
+.poolsContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0.5rem 1rem 0.5rem;
+}
+
+.pool {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  background-color: rgba(164, 54, 98, 0.608);
+  height: 15rem;
+  width: 25rem;
+  border-radius: 100px;
+  border: 1px solid rgba(218, 165, 32, 0.357);
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+
+.poolToken {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.poolReserve {
+  font-size: 1.5rem;
+}
+
+.price {
+  font-size: 0.7rem;
+}
+
+.center {
+  margin-top: 6rem;
+}
+
+.addLiquidityButton {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+.addLiquidityButton > button {
+  width: 16rem;
+  border-radius: 10px;
+  border: 1px solid black;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  background-color: rgba(252, 2, 248, 0.725);
+}
+.addLiquidityButton > button:hover {
+  transform: scale(1.05);
+}
+.share {
+  margin-top: 2rem;
+  font-size: 1.3rem;
+  color: bisque;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 5.5rem;
+  margin-bottom: 3rem;
+}
+
+.image {
+  width: 10rem;
+}

@@ -2,11 +2,12 @@ import React from "react";
 import { Inter } from 'next/font/google'
 import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import styles from '../styles/Mint.module.css'
+import styles from '../styles/Pool.module.css'
+import { VscArrowSwap } from "react-icons/vsc";
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function About(){
+export default function Pool() {
     return(
 
         <>
@@ -26,12 +27,44 @@ export default function About(){
             <ConnectButton showBalance={false}/>
         </div>
 
-        <div className={styles.container}>
-            <h2 className={styles.title}>About Page</h2>
-            <p className={styles.description}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-            </p>
+        <div className={`${styles.main} ${inter.className}`}>
+
+            <div className={styles.textContainer}>
+                <h2>Become a Market Maker by providing liquidity</h2>
+                <h3>&</h3>
+                <h3>Earn yield based on your share in the Pool</h3>
+            </div>
+
+            <div>
+                <p className={styles.poolsText}>POOLS</p>
+                <div className={styles.container}>
+                    <div className={styles.poolName}>ETH / XLA</div>
+                    <div className={styles.poolsContainer}>
+                        <div className={styles.pool}>
+                            <p className={styles.poolToken}>ETH Pool</p>
+                            <p className={styles.poolReserve}>Reserve: </p>
+                            <p className={styles.price}>1ETH = XLA</p>
+                        </div>
+                        <VscArrowSwap className={styles.center} size={50} color="white"></VscArrowSwap>
+                        <div className={styles.pool}>
+                            <p className={styles.poolToken}>XLA Pool</p>
+                            <p className={styles.poolReserve}>Reserve: </p>
+                            <p className={styles.price}>1XLA = ETH</p>
+                        </div>
+                    </div>
+                    <div className={styles.addLiquidityButton}>
+                        <button className={styles.addLiquidityButton}>+ Add Liquidity</button>
+                    </div>
+                </div>
+            </div>
+            <p className={styles.share}>Your share in the pool: 0%</p>
+
         </div>
+
+        <div className={styles.imageContainer}>
+          <img className={styles.image} src="https://i.imgur.com/buNhbF7.png" />
+        </div>
+
         </>
 
     )
