@@ -4,11 +4,17 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowKitProvider, getDefaultWallets, lightTheme } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
-import { publicProvider } from 'wagmi/providers/public';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 
 const { chains, publicClient } = configureChains(
   [sepolia],
-  [publicProvider()]
+  [
+    jsonRpcProvider({
+      rpc: () => ({
+        http: "https://misty-shy-pine.ethereum-sepolia.quiknode.pro/05277f6c32cb0fce7c041874e0a40085822f6e42/"
+      }),
+    })
+  ]
 );
 
 const { connectors } = getDefaultWallets({
@@ -27,7 +33,7 @@ function App({ Component, pageProps }) {
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains} theme={lightTheme({
-        accentColor: '#5f29d470',
+        accentColor: 'rgba(50, 130, 188, 0.862)',
         accentColorForeground: 'white',
         borderRadius: 'large',
         fontStack: 'system', 
