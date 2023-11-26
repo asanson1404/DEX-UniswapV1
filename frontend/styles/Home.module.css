@@ -27,96 +27,6 @@
   min-height: 93vh;
 }
 
-.container {
-  display: flex;
-  background-color: rgb(10, 9, 9);
-  width: 25rem;
-  height: 18rem;
-  justify-content: center;
-  border: 1px solid #ffffff70;
-  border-radius: 10px;
-  margin-top: 5rem;
-  margin-bottom: 3rem;
-  z-index: 1;
-  box-shadow:
-        1.2rem 1.2rem 355px 12px rgb(12, 18, 81);
-}
-
-.actiondiv {
-  display: flex;
-  flex-direction: column;
-  padding: 5rem 0.5rem 0.5rem 0.5rem;
-}
-
-.subContainer {
-  width: 24rem;
-  height: 5rem;
-  margin-bottom: 0.3rem;
-  background-color: rgb(30, 26, 26);
-  border: 1px solid #22181870;
-  border-radius: 15px;
-}
-
-.subContainer > p {
-  font-size: 0.8rem;
-  color: gray;
-  margin-top: 0.2rem;
-  margin-left: 0.5rem;
-}
-
-.subsubContainer {
-  display: flex;
-  align-items: center;
-}
-
-.subContainer > input,
-.subsubContainer > input {
-  outline: none;
-  margin-left: 0.5rem;
-  font-size: 2rem;
-  width: 60%;
-  background-color: transparent;
-  border: none;
-  color: wheat;
-}
-
-.subContainer > input::placeholder,
-.subsubContainer > input::placeholder {
-  color: gray;
-}
-
-.outUnit {
-  height: 1.5rem;
-  width: 5rem;
-  margin-left: 3rem;
-  border: 1px solid #5b585870;
-  border-radius: 25px;
-  background-color: #5f29d470;
-}
-
-.input::-webkit-outer-spin-button,
-.input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
-    -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-}
-
-.input[type=number] {
-    -moz-appearance:textfield; /* Firefox */
-}
-
-.swap {
-  height: 2.5rem;
-  font-weight: bold;
-  background-color: #5f29d470;
-  border: 1px solid #22181870;
-  border-radius: 10px;
-}
-
-.swap:hover {
-  background-color: #6e4eb270;
-}
-
 .imageContainer {
   display: flex;
   justify-content: center;
@@ -196,45 +106,9 @@
 .logo {
   position: relative;
 }
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  .card:hover {
-    background: rgba(var(--card-rgb), 0.1);
-    border: 1px solid rgba(var(--card-border-rgb), 0.15);
-  }
-
-  .card:hover span {
-    transform: translateX(4px);
-  }
-}
-
-@media (prefers-reduced-motion) {
-  .card:hover span {
-    transform: none;
-  }
-}
 
 /* Mobile */
 @media (max-width: 700px) {
-
-  .content {
-    padding: 4rem;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-    margin-bottom: 120px;
-    max-width: 320px;
-    text-align: center;
-  }
-
-  .card {
-    padding: 1rem 2.5rem;
-  }
-
-  .card h2 {
-    margin-bottom: 0.5rem;
-  }
 
   .center {
     padding: 3rem 0 0rem;
@@ -246,66 +120,9 @@
     height: 300px;
   }
 
-  .description {
-    font-size: 0.8rem;
-  }
-
-  .description a {
-    padding: 1rem;
-  }
-
-  .description p,
-  .description div {
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    width: 100%;
-  }
-
-  .description p {
-    align-items: center;
-    inset: 0 0 auto;
-    padding: 2rem 1rem 1.4rem;
-    border-radius: 0;
-    border: none;
-    border-bottom: 1px solid rgba(var(--callout-border-rgb), 0.25);
-    background: linear-gradient(
-      to bottom,
-      rgba(var(--background-start-rgb), 1),
-      rgba(var(--callout-rgb), 0.5)
-    );
-    background-clip: padding-box;
-    backdrop-filter: blur(24px);
-  }
-
-  .description div {
-    align-items: flex-end;
-    pointer-events: none;
-    inset: auto 0 0;
-    padding: 2rem;
-    height: 200px;
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgb(var(--background-end-rgb)) 40%
-    );
-    z-index: 1;
-  }
-}
-
-/* Tablet and Smaller Desktop */
-@media (min-width: 701px) and (max-width: 1120px) {
-  .grid {
-    grid-template-columns: repeat(2, 50%);
-  }
-
 }
 
 @media (prefers-color-scheme: dark) {
-  .vercelLogo {
-    filter: invert(1);
-  }
-
   .logo {
     filter: invert(1) drop-shadow(0 0 0.3rem #ffffff70);
   }

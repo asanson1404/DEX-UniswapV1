@@ -1,6 +1,6 @@
 import Dropdown from 'react-dropdown';
-import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
-import styles from './style.module.css'
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import styles from './style.module.css';
 
 function DropDownButton({selectedToken, setSelectedToken}) {
 
