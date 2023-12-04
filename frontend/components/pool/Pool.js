@@ -66,12 +66,12 @@ function Pool() {
 
     // Function which returns the xla price
     const xlaPrice = () => {
-        return (formatEther(ethReserve.data?.value) / formatEther(xelaReserve.data))
+        return (formatEther(Number(ethReserve.data?.value)) / formatEther(BigInt(xelaReserve.data)))
     };
 
     // Function which returns the eth price
     const ethPrice = () => {
-        return (formatEther(xelaReserve.data) / formatEther(ethReserve.data?.value))
+        return (formatEther(BigInt(xelaReserve.data)) / formatEther(Number(ethReserve.data?.value)))
     };
 
     // Function to add liquidity to the ETH/XLA pool
@@ -121,7 +121,7 @@ function Pool() {
                         <div className={styles.pool}>
                             <p className={styles.poolToken}>XLA Pool</p>
                             <p className={styles.poolReserve}>
-                                {(formatEther(xelaReserve.data))} XLA
+                                {formatEther(BigInt(xelaReserve.data))} XLA
                             </p>
                             <p className={styles.price}>1XLA = {xlaPrice()}ETH</p>
                         </div>
