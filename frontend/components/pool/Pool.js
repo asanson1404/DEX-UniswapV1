@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { formatEther, parseEther } from 'viem'
 import { useAccount, useBalance, useContractRead } from 'wagmi'
 import { readContract, waitForTransaction, writeContract } from 'wagmi/actions'
+import AddLiquidityComponent from "./AddLiquidity"
 
 function Pool() {
 
@@ -77,35 +78,6 @@ function Pool() {
         return ((formatEther(Number(xelaReserve.data)) / TO_ETH_UNIT) / formatEther(Number(ethReserve.data?.value)))
     };
 
-    // Function to add liquidity to the ETH/XLA pool
-    /*async function addLiquidity(amountOfXela) {
-        
-        if (!isConnected) {
-            window.alert("Wallet not Connected");
-        } else {
-            
-            setIsAdding(true);
-
-            try {
-                const hash = await writeContract({
-                    address: XelaTokenAddress,
-                    abi: XelaTokenABI,
-                    functionName: 'approve',
-                    args: [ExchangeAddress, amountOfXela],
-                });
-
-                await waitForTransaction(hash);
-
-            } catch (error) {
-                console.error(error);
-                window.alert(error);
-            }
-
-            setIsAdding(true);
-
-        }
-    }*/
-
     return (
         <>
             <div>
@@ -129,9 +101,7 @@ function Pool() {
                             <p className={styles.price}>1XLA = {xlaPrice()}ETH</p>
                         </div>
                     </div>
-                    <div className={styles.addLiquidityButton}>
-                        <button onClick={() => addLiquidity(1)} className={styles.addLiquidityButton}>+ Add Liquidity</button>
-                    </div>
+                    <AddLiquidityComponent />
                 </div>
             </div>
             <p className={styles.share}>Your share in the pool: {userShare()}</p>

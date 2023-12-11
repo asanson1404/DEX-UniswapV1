@@ -1,3 +1,4 @@
+/* Pools Css Style*/
 .poolsText {
     margin-top: 5rem;
     margin-left: 1.5rem;
@@ -77,7 +78,7 @@
     font-size: 1.1rem;
     font-weight: 600;
     padding: 0.4rem 0.8rem;
-    background-color: rgba(252, 2, 248, 0.725);
+    background-color: rgb(207, 49, 204);
 }
 .addLiquidityButton > button:hover {
     transform: scale(1.05);
@@ -86,4 +87,149 @@
     margin-top: 2rem;
     font-size: 1.3rem;
     color: bisque;
+}
+
+/* Add Liquidity PopUp Css Style*/
+.popupContainer {
+    background-color: rgb(68, 22, 41);
+    color: bisque;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 30rem;
+    border-radius: 10px;
+    border: solid 1px rgb(76, 75, 75);
+}
+.header {
+    border-bottom: 1px solid gray;
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.7rem;
+}
+.pairColor {
+    color: goldenrod;
+}
+.content {
+    text-align: center;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-left: 1.9rem;
+    padding-right: 1.9rem;
+}
+.infoContainer {
+    display: flex;
+    margin-top: 1.5rem;
+    margin-bottom: 0.3rem;
+    text-align: left;
+    font-weight: bold;
+}
+.infoButton {
+    margin-left: 0.5rem;
+    margin-top: 0.1rem;
+}
+.infoPopUpContent {
+    padding: 0.3rem;
+    background-color: white;
+    width: 10rem;
+    color: rgb(42, 13, 25);
+    border-radius: 2px;
+    border: none;
+}
+.infoMessage {
+    font-size: 0.9rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+}
+.addTokenDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(128, 128, 128, 0.629);
+    border-radius: 4px;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    margin-bottom: 1.5rem;
+}
+.xlaName {
+    margin-left: 1.5rem;
+    font-size: x-large;
+    font-weight: bolder;
+    color: goldenrod;
+}
+.addTokenContainer {
+    text-align: right;
+}
+.addTokenContainer > input {
+    outline: none;
+    margin-left: 0.5rem;
+    font-size: 1.2rem;
+    text-align: right;
+    font-weight: bold;
+    width: 60%;
+    background-color: transparent;
+    border: none;
+    color: wheat;
+}
+.addTokenContainer > input::placeholder {
+    color: gray;
+}
+.addTokenContainer > input::-webkit-outer-spin-button,
+.addTokenContainer > input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+.addTokenContainer > input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+.addTokenContainer > p {
+    font-size: 0.85rem;
+    color: rgb(242, 231, 218);
+}
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+}
+.button {
+    height: 1.9rem;
+    width: 10rem;
+    padding: 0.2rem 1rem 0.2rem 1rem;
+    font-size: 1.1rem;
+    margin-left: 0.9rem;
+    margin-right: 0.9rem;
+    font-weight: bold;
+    background-color: rgb(207, 49, 204);
+    color: white;
+    border: 1px solid rgb(59, 9, 9);
+    border-radius: 5px;
+}
+.button:hover {
+    background-color: rgb(253, 3, 249);
+}
+.buttonWhenAdding {
+    height: 1.9rem;
+    width: 10rem;
+    padding: 0.2rem 1rem 0.2rem 1rem;
+    font-size: 1.1rem;
+    margin-left: 0.9rem;
+    margin-right: 0.9rem;
+    font-weight: bold;
+    background-color: rgb(207, 49, 204);
+    color: white;
+    border: 1px solid rgb(59, 9, 9);
+    border-radius: 5px;
+}
+.close {
+    cursor: pointer;
+    outline: none;
+    color: red;
+    position: absolute;
+    display: block;
+    padding: 2px 5px;
+    line-height: 20px;
+    right: -10px;
+    top: -10px;
+    font-size: 24px;
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #cfcece;
 }
