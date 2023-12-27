@@ -1,26 +1,16 @@
 import { VscArrowSwap } from "react-icons/vsc";
 import styles from './style.module.css';
 
-import {    XelaTokenAddress, XelaTokenABI,
-            ExchangeAddress, ExchangeABI
-} from "@/constants";   
+import { ExchangeAddress, ExchangeABI } from "@/constants";   
 
-import { useState } from 'react'
-import { formatEther, parseEther } from 'viem'
+import { formatEther } from 'viem'
 import { useAccount, useBalance, useContractRead } from 'wagmi'
-import { readContract, waitForTransaction, writeContract } from 'wagmi/actions'
 import AddLiquidityComponent from "./AddLiquidity"
 
-function Pool() {
+export default function Pool() {
 
-    // BigInt bug: variable to have the right Unit
-    const TO_ETH_UNIT = 10 ** 4;
-
-    // State variable to show if liquidity is beeing added
-    const [ isAdding, setIsAdding ] = useState(false);
-
-    // Check if the users's wallet is connected or disconnected, store its address (Wagmi hooks) 
-    const { address, isConnected } = useAccount();
+    // Store the address of the connected user 
+    const { address } = useAccount();
 
     // Fetch the ETH Reserve
     const ethReserve = useBalance({
@@ -56,26 +46,35 @@ function Pool() {
     // Function which returns the user's share in the pool
     const userShare = () => {
 
-        const formatTotalLp = formatEther(Number(totalLpToken.data));
-        const formatUserLp  = formatEther(Number(userLpToken.data));
-
-        if (formatTotalLp !== 0 ) {
-            const userShare = (formatUserLp / formatTotalLp) * 100;
-            return `${userShare} %`
+        if (totalLpToken.data && userLpToken.data) {
+            const formatTotalLp = formatEther(totalLpToken.data);
+            const formatUserLp  = formatEther(userLpToken.data);
+    
+            if (formatTotalLp !== 0 ) {
+                const userShare = (formatUserLp / formatTotalLp) * 100;
+                return `${userShare} %`
+            }
+            else {
+                return "Empty Pool"
+            }
         }
         else {
-            return "Empty Pool"
+            return "0 %"
         }
     };
 
     // Function which returns the xla price
     const xlaPrice = () => {
-        return (formatEther(Number(ethReserve.data?.value)) / (formatEther(Number(xelaReserve.data)) / TO_ETH_UNIT))
+        if (ethReserve.data && xelaReserve.data) {
+            return (formatEther(ethReserve.data.value) / formatEther(xelaReserve.data))
+        }
     };
 
     // Function which returns the eth price
     const ethPrice = () => {
-        return ((formatEther(Number(xelaReserve.data)) / TO_ETH_UNIT) / formatEther(Number(ethReserve.data?.value)))
+        if (xelaReserve.data && ethReserve.data) {
+            return (formatEther(xelaReserve.data) / formatEther(ethReserve.data.value))
+        }
     };
 
     return (
@@ -88,7 +87,7 @@ function Pool() {
                         <div className={styles.pool}>
                             <p className={styles.poolToken}>ETH Pool</p>
                             <p className={styles.poolReserve}>
-                                {ethReserve.data?.formatted} ETH
+                                {ethReserve.data && (ethReserve.data.formatted)} ETH
                             </p>
                             <p className={styles.price}>1ETH = {ethPrice()}XLA</p>
                         </div>
@@ -96,7 +95,7 @@ function Pool() {
                         <div className={styles.pool}>
                             <p className={styles.poolToken}>XLA Pool</p>
                             <p className={styles.poolReserve}>
-                                {formatEther(Number(xelaReserve.data)) / TO_ETH_UNIT} XLA
+                                {xelaReserve.data && (formatEther(xelaReserve.data))} XLA
                             </p>
                             <p className={styles.price}>1XLA = {xlaPrice()}ETH</p>
                         </div>
@@ -109,5 +108,3 @@ function Pool() {
     )
 
 }
-
-export default Pool;
