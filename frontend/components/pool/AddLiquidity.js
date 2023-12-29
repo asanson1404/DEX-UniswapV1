@@ -1,46 +1,66 @@
 import styles from './style.module.css';
 import Popup from 'reactjs-popup';
-import { useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useEffect, useState } from 'react';
+import { useAccount, useBalance, useContractRead } from 'wagmi';
+import { prepareWriteContract, writeContract, waitForTransaction } from 'wagmi/actions';
+import { formatEther, parseEther } from 'viem'
 import { IoMdInformationCircleOutline } from "react-icons/io";
 
+import {    XelaTokenAddress, XelaTokenABI,
+            ExchangeAddress, ExchangeABI
+} from "@/constants"; 
+
 // Function to add liquidity to the ETH/XLA pool
-async function addLiquidity(amountOfXela) {
-    
-    if (!isConnected) {
-        window.alert("Wallet not Connected");
-    } else {
+async function addLiquidity(
+    amountOfXela,
+    amountOfEth,
+    setOpenPopUp,
+    setIsAdding,
+    setIsApproving,
+    setRightEthAmount,
+    setRightXlaAmount
+) {
         
+    try {
+
+        // First approve the Exchange Contract as a spender
+        // The amount of the allowance is the amount the user would like to add
+        const { request: request1 } = await prepareWriteContract({
+            address: XelaTokenAddress,
+            abi: XelaTokenABI,
+            functionName: 'approve',
+            args: [ExchangeAddress, parseEther(amountOfXela)],
+        });
+        setIsApproving(true);
+        const hash1 = await writeContract(request1);
+        await waitForTransaction(hash1);
+        setIsApproving(false);
+        
+        // Then add the liquidity
         setIsAdding(true);
-
-        try {
-            // First approve the Exchange Contract as a spender
-            // The amount of the allowance is the amount the user would like to add
-            const hash1 = await writeContract({
-                address: XelaTokenAddress,
-                abi: XelaTokenABI,
-                functionName: 'approve',
-                args: [ExchangeAddress, amountOfXela],
-            });
-            await waitForTransaction(hash1);
-
-            // Then add the liquidity
-            const hash2 = await writeContract({
-                address: ExchangeAddress,
-                abi: ExchangeABI,
-                functionName: 'addLiquidity',
-                args: [amountOfXela],
-            });
-            await waitForTransaction(hash2);
-
-        } catch (error) {
-            console.error(error);
-            window.alert(error);
-        }
-
+        const { request: request2 } = await prepareWriteContract({
+            address: ExchangeAddress,
+            abi: ExchangeABI,
+            functionName: 'addLiquidity',
+            args: [parseEther(amountOfXela)],
+            value: parseEther(amountOfEth),
+        });
+        const hash2 = await writeContract(request2);
+        await waitForTransaction(hash2);
         setIsAdding(false);
 
+        // Finally close AddLiquidity PopUp
+        setRightEthAmount(0);
+        setRightXlaAmount(0);
+        setOpenPopUp(false);
+
+    } catch (error) {
+        console.error(error);
+        window.alert(error);
+        setIsAdding(false);
+        setIsApproving(false);
     }
+
 }
 
 // Info Popup Component
@@ -76,8 +96,83 @@ export default function AddLiquidityComponent() {
     // Check if the users's wallet is connected or disconnected, store its address (Wagmi hooks) 
     const { address, isConnected } = useAccount();
 
-    const [ openPopUp, setOpenPopUp ] = useState(false);
-    const [ isAdding, setIsAdding ] = useState(false);
+    const [ openPopUp, setOpenPopUp ]       = useState(false);
+    const [ isApproving, setIsApproving ]   = useState(false);
+    const [ isAdding, setIsAdding ]         = useState(false);
+
+    // Fetch user ETH Balance
+    const ethUserBalance = useBalance({
+        address: address,
+        watch: true,
+    });
+
+    // Fetch user XLA Balance
+    const xlaUserBalance = useContractRead({
+        address: XelaTokenAddress,
+        abi: XelaTokenABI,
+        functionName: 'balanceOf',
+        args: [address],
+        watch: true,
+    });
+
+    // Fetch the Pool ETH Reserve
+    const ethReserve = useBalance({
+        address: ExchangeAddress,
+        watch: true,
+    });
+
+    // Fetch the Pool XLA Reserve
+    const xelaReserve = useContractRead({
+        address: ExchangeAddress,
+        abi: ExchangeABI,
+        functionName: 'getXelaReserve',
+        watch: true,
+    });
+
+    // State variable for conditional CSS
+    const [ exceedXla, setExceedXla ] = useState(false);
+    const [ exceedEth, setExceedEth ] = useState(false);
+
+    // State variables to calculate the right amount of token to add to the Pool
+    const [ rightXlaAmount, setRightXlaAmount ] = useState(0);
+    const [ rightEthAmount, setRightEthAmount ] = useState(0);
+
+    // useEffect to change input color when it exceeds the user's balance
+    useEffect(() => {
+        if (xlaUserBalance.data) {
+            if (rightXlaAmount > formatEther(xlaUserBalance.data)) {
+                setExceedXla(true);
+            } else {
+                setExceedXla(false);
+            }
+        }
+    }, [rightXlaAmount]);
+
+    // useEffect to change input color when it exceeds the user's balance
+    useEffect(() => {
+        if (ethUserBalance.data) {
+            if (rightEthAmount > parseFloat(formatEther(ethUserBalance.data.value))) {
+                setExceedEth(true);
+            } else {
+                setExceedEth(false);
+            }
+        }
+    }, [rightEthAmount]);
+
+    // Adding XLA also add ETH (amount to be calculated to keep a constant ratio)
+    const handleXlaInputChange = (event) => {
+        if (ethReserve.data && xelaReserve.data) {
+            setRightXlaAmount(Number(event.target.value));
+            setRightEthAmount(event.target.value * formatEther(ethReserve.data.value) / formatEther(xelaReserve.data));
+        }
+    };
+    // Adding ETH also add XLA (amount to be calculated to keep a constant ratio)
+    const handleEthInputChange = (event) => {
+        if (xelaReserve.data && ethReserve.data) {
+            setRightEthAmount(Number(event.target.value));
+            setRightXlaAmount(event.target.value * formatEther(xelaReserve.data) / formatEther(ethReserve.data.value));
+        }
+    };
 
     return (
         <>
@@ -115,12 +210,23 @@ export default function AddLiquidityComponent() {
                                     <div className={styles.xlaName}>XLA</div>
                                     <div className={styles.addTokenContainer}>
                                         <input
-                                            type="number" 
+                                            className={exceedXla ? styles.xlaInputExceeded : styles.xlaInputNotExceeded}
+                                            type="number"
                                             spellCheck={false} 
                                             placeholder="Enter Amount"
-                                            >
+                                            value={rightXlaAmount === 0 ? null : rightXlaAmount}
+                                            onChange={handleXlaInputChange}
+                                        >
                                         </input>
-                                        <p>XLA balance:</p>
+                                        <p>XLA balance: {
+                                            xlaUserBalance.data && (
+                                                formatEther(xlaUserBalance.data).includes('.') ? 
+                                                    parseFloat(formatEther(xlaUserBalance.data)).toFixed(4)
+                                                :
+                                                    formatEther(xlaUserBalance.data)
+                                            )
+                                            }
+                                        </p>
                                     </div>
                                 </div>
                                 <div className={styles.infoContainer}>
@@ -131,22 +237,44 @@ export default function AddLiquidityComponent() {
                                     <div className={styles.xlaName}>ETH</div>
                                     <div className={styles.addTokenContainer}>
                                         <input
-                                            type="number" 
+                                            className={exceedEth ? styles.ethInputExceeded : styles.ethInputNotExceeded}
+                                            type="number"
                                             spellCheck={false} 
                                             placeholder="Enter Amount"
-                                            >
+                                            value={rightEthAmount === 0 ? null : rightEthAmount}
+                                            onChange={handleEthInputChange}
+                                        >
                                         </input>
-                                        <p>ETH balance:</p>
+                                        <p>ETH balance: {
+                                            ethUserBalance.data && (
+                                                formatEther(ethUserBalance.data.value).includes('.') ?
+                                                    parseFloat(formatEther(ethUserBalance.data.value)).toFixed(4)
+                                                :
+                                                    formatEther(ethUserBalance.data.value)
+                                            )
+                                            }
+                                        </p>
                                     </div>
                                 </div>
                                 <div className={styles.buttonContainer}>
-                                    {!isAdding ? (
+                                    {(!isApproving && !isAdding) ? (
                                         <>
                                             <button className={styles.button} 
                                                     onClick={() => {
-
-                                                        setIsAdding(true);
-                                                        //await add();
+                                                        if (rightEthAmount == 0 || rightXlaAmount == 0) {
+                                                            window.alert("Amount to add not set. Please enter the amount of ETH and XLA you would like to add into the pool.");
+                                                        } else {
+                                                            setIsAdding(true);
+                                                            addLiquidity(
+                                                                rightXlaAmount.toString(),
+                                                                rightEthAmount.toString(),
+                                                                setOpenPopUp,
+                                                                setIsAdding,
+                                                                setIsApproving,
+                                                                setRightEthAmount,
+                                                                setRightXlaAmount
+                                                            );
+                                                        }
                                                     }}
                                             >
                                                 Add Liquidity
@@ -157,9 +285,13 @@ export default function AddLiquidityComponent() {
                                                 Cancel
                                             </button>
                                         </>
-                                    ) : (
+                                    ) : isApproving ? (
                                         <button className={styles.buttonWhenAdding}>
-                                            Adding...
+                                            <p>Approving...</p>
+                                        </button>
+                                    ) : isAdding && (
+                                        <button className={styles.buttonWhenAdding}>
+                                            <p>Adding...</p>
                                         </button>
                                     )}
                                 </div>

@@ -167,6 +167,18 @@
     width: 60%;
     background-color: transparent;
     border: none;
+    
+}
+.xlaInputExceeded {
+    color: rgb(211, 23, 23);
+}
+.xlaInputNotExceeded {
+    color: wheat;
+}
+.ethInputExceeded {
+    color: rgb(211, 23, 23);
+}
+.ethInputNotExceeded {
     color: wheat;
 }
 .addTokenContainer > input::placeholder {
@@ -217,6 +229,21 @@
     color: white;
     border: 1px solid rgb(59, 9, 9);
     border-radius: 5px;
+}
+.buttonWhenAdding > p {
+    background: linear-gradient(90deg, #f5f7f5, #484848, #f5f7f5, #f5f7f5, #f5f7f5);
+    background-size: 80%;
+    animation: animate 2s linear infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: rgba(250, 2, 2, 0);
+}
+@keyframes animate {
+    0% {
+      background-position: -200%;
+    }
+    100% {
+      background-position: 200%;
+    }
 }
 .close {
     cursor: pointer;
