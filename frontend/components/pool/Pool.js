@@ -51,7 +51,7 @@ export default function Pool() {
             const formatUserLp  = formatEther(userLpToken.data);
     
             if (formatTotalLp !== 0 ) {
-                const userShare = (formatUserLp / formatTotalLp) * 100;
+                const userShare = roundNumber((formatUserLp / formatTotalLp) * 100);
                 return `${userShare} %`
             }
             else {
@@ -89,7 +89,7 @@ export default function Pool() {
                             <p className={styles.poolReserve}>
                                 {ethReserve.data && (ethReserve.data.formatted)} ETH
                             </p>
-                            <p className={styles.price}>1ETH = {ethPrice()}XLA</p>
+                            <p className={styles.price}>1ETH = {roundNumber(ethPrice())}XLA</p>
                         </div>
                         <VscArrowSwap className={styles.center} size={50} color="white"></VscArrowSwap>
                         <div className={styles.pool}>
@@ -97,7 +97,7 @@ export default function Pool() {
                             <p className={styles.poolReserve}>
                                 {xelaReserve.data && (formatEther(xelaReserve.data))} XLA
                             </p>
-                            <p className={styles.price}>1XLA = {xlaPrice()}ETH</p>
+                            <p className={styles.price}>1XLA = {roundNumber(xlaPrice())}ETH</p>
                         </div>
                     </div>
                     <AddLiquidityComponent />
@@ -107,4 +107,18 @@ export default function Pool() {
         </>
     )
 
+}
+
+// Function to round a number according to its value
+export function roundNumber(number) {
+    const splitNumberArray = number.toString().split('.');
+    if (splitNumberArray.length === 1) {
+        return number;
+    } else {
+        const nbDecimals = splitNumberArray[1].length;
+        if (nbDecimals >= 6) return number.toFixed(6);
+        for (let i = 5; i > 0; i--) {
+            if (nbDecimals === i) return number.toFixed(i);
+        }
+    }
 }
