@@ -5,7 +5,7 @@ import { useAccount, useBalance, useContractRead } from 'wagmi';
 import { prepareWriteContract, writeContract, waitForTransaction } from 'wagmi/actions';
 import { formatEther, parseEther } from 'viem'
 import { IoMdInformationCircleOutline } from "react-icons/io";
-
+import { roundNumber } from './Pool';
 import {    XelaTokenAddress, XelaTokenABI,
             ExchangeAddress, ExchangeABI
 } from "@/constants"; 
@@ -18,7 +18,9 @@ async function addLiquidity(
     setIsAdding,
     setIsApproving,
     setRightEthAmount,
-    setRightXlaAmount
+    setRightXlaAmount,
+    setRoundedEthAmount,
+    setRoundedXlaAmount,
 ) {
         
     try {
@@ -52,6 +54,8 @@ async function addLiquidity(
         // Finally close AddLiquidity PopUp
         setRightEthAmount(0);
         setRightXlaAmount(0);
+        setRoundedEthAmount(0);
+        setRoundedXlaAmount(0);
         setOpenPopUp(false);
 
     } catch (error) {
@@ -136,6 +140,9 @@ export default function AddLiquidityComponent() {
     // State variables to calculate the right amount of token to add to the Pool
     const [ rightXlaAmount, setRightXlaAmount ] = useState(0);
     const [ rightEthAmount, setRightEthAmount ] = useState(0);
+    // State variables to round the amount of token to add to the Pool
+    const [ roundedXlaAmount, setRoundedXlaAmount ] = useState(0);
+    const [ roundedEthAmount, setRoundedEthAmount ] = useState(0);
 
     // useEffect to change input color when it exceeds the user's balance
     useEffect(() => {
@@ -164,6 +171,8 @@ export default function AddLiquidityComponent() {
         if (ethReserve.data && xelaReserve.data) {
             setRightXlaAmount(Number(event.target.value));
             setRightEthAmount(event.target.value * formatEther(ethReserve.data.value) / formatEther(xelaReserve.data));
+            setRoundedXlaAmount(Number(event.target.value));
+            setRoundedEthAmount(roundNumber(event.target.value * formatEther(ethReserve.data.value) / formatEther(xelaReserve.data)));
         }
     };
     // Adding ETH also add XLA (amount to be calculated to keep a constant ratio)
@@ -171,6 +180,8 @@ export default function AddLiquidityComponent() {
         if (xelaReserve.data && ethReserve.data) {
             setRightEthAmount(Number(event.target.value));
             setRightXlaAmount(event.target.value * formatEther(xelaReserve.data) / formatEther(ethReserve.data.value));
+            setRoundedEthAmount(Number(event.target.value));
+            setRoundedXlaAmount(roundNumber(event.target.value * formatEther(xelaReserve.data) / formatEther(ethReserve.data.value)));
         }
     };
 
@@ -214,16 +225,13 @@ export default function AddLiquidityComponent() {
                                             type="number"
                                             spellCheck={false} 
                                             placeholder="Enter Amount"
-                                            value={rightXlaAmount === 0 ? null : rightXlaAmount}
+                                            value={roundedXlaAmount === 0 ? null : roundedXlaAmount}
                                             onChange={handleXlaInputChange}
                                         >
                                         </input>
                                         <p>XLA balance: {
                                             xlaUserBalance.data && (
-                                                formatEther(xlaUserBalance.data).includes('.') ? 
-                                                    parseFloat(formatEther(xlaUserBalance.data)).toFixed(4)
-                                                :
-                                                    formatEther(xlaUserBalance.data)
+                                                roundNumber(Number(formatEther(xlaUserBalance.data)))
                                             )
                                             }
                                         </p>
@@ -241,16 +249,13 @@ export default function AddLiquidityComponent() {
                                             type="number"
                                             spellCheck={false} 
                                             placeholder="Enter Amount"
-                                            value={rightEthAmount === 0 ? null : rightEthAmount}
+                                            value={roundedEthAmount === 0 ? null : roundedEthAmount}
                                             onChange={handleEthInputChange}
                                         >
                                         </input>
                                         <p>ETH balance: {
                                             ethUserBalance.data && (
-                                                formatEther(ethUserBalance.data.value).includes('.') ?
-                                                    parseFloat(formatEther(ethUserBalance.data.value)).toFixed(4)
-                                                :
-                                                    formatEther(ethUserBalance.data.value)
+                                                roundNumber(Number(formatEther(ethUserBalance.data.value)))
                                             )
                                             }
                                         </p>
@@ -272,7 +277,9 @@ export default function AddLiquidityComponent() {
                                                                 setIsAdding,
                                                                 setIsApproving,
                                                                 setRightEthAmount,
-                                                                setRightXlaAmount
+                                                                setRightXlaAmount,
+                                                                setRoundedEthAmount,
+                                                                setRoundedXlaAmount
                                                             );
                                                         }
                                                     }}
