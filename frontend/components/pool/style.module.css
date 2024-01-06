@@ -67,12 +67,19 @@
     margin-top: 6rem;
 }
 
+.liquidityButtons {
+    display: flex;
+    justify-content: center;
+}
+
 .addLiquidityButton {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     text-align: center;
 }
 .addLiquidityButton > button {
     width: 16rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
     border-radius: 10px;
     border: 1px solid black;
     font-size: 1.1rem;
@@ -89,7 +96,7 @@
     color: bisque;
 }
 
-/* Add Liquidity PopUp Css Style*/
+/* Add Liquidity and Remove Liquidity PopUp Css Style*/
 .popupContainer {
     background-color: rgb(68, 22, 41);
     color: bisque;
@@ -155,6 +162,12 @@
     font-weight: bolder;
     color: goldenrod;
 }
+.lpName {
+    margin-left: 0.1rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: goldenrod;
+}
 .addTokenContainer {
     text-align: right;
 }
@@ -197,13 +210,37 @@
     font-size: 0.85rem;
     color: rgb(242, 231, 218);
 }
+.burnInsightDiv {
+    border: 1px solid rgba(128, 128, 128, 0.629);
+    border-radius: 4px;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    margin-top: -0.8rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+.ethToReturn {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+}
+.xlaToReturn {
+    display: flex;
+    justify-content: space-between;
+}
+.textColor {
+    color: rgb(242, 231, 218);
+}
+.tokenColor {
+    color: rgb(252, 251, 249);
+    font-weight: 600;
+}
 .buttonContainer {
     display: flex;
     justify-content: center;
 }
 .button {
     height: 1.9rem;
-    width: 10rem;
+    width: 12rem;
     padding: 0.2rem 1rem 0.2rem 1rem;
     font-size: 1.1rem;
     margin-left: 0.9rem;

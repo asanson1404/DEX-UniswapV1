@@ -6,6 +6,7 @@ import { ExchangeAddress, ExchangeABI } from "@/constants";
 import { formatEther } from 'viem'
 import { useAccount, useBalance, useContractRead } from 'wagmi'
 import AddLiquidityComponent from "./AddLiquidity"
+import RemoveLiquidityComponent from "./RemoveLiquidity"
 
 export default function Pool() {
 
@@ -100,7 +101,10 @@ export default function Pool() {
                             <p className={styles.price}>1XLA = {roundNumber(xlaPrice())}ETH</p>
                         </div>
                     </div>
-                    <AddLiquidityComponent />
+                    <div className={styles.liquidityButtons}>
+                        <AddLiquidityComponent />
+                        <RemoveLiquidityComponent />
+                    </div>
                 </div>
             </div>
             <p className={styles.share}>Your share in the pool: {userShare()}</p>
