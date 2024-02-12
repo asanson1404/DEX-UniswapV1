@@ -1,5 +1,5 @@
-export const XelaTokenAddress = "0x8321B53ff082b2B7Bd57872131256a448c396709";
-export const ExchangeAddress  = "0xb671ac5EE34786857F46b275B374F3Cf1Aa5e22E";
+export const XelaTokenAddress = "0xE4aD78DBFc4AD3Dec7B7b38Cfa4508a7636F8c49";
+export const ExchangeAddress  = "0xCBF972058136cce36250589cd22aE1641E31353a";
 
 export const XelaTokenABI = [
     {

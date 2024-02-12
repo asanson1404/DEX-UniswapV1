@@ -8,8 +8,8 @@
 /*
     This contract is a very basic ERC-20 that just mints a million tokens to the deployer address.   
 
-    Smart Contract Address on Sepolia testnet : 0x8321B53ff082b2B7Bd57872131256a448c396709
-    https://sepolia.etherscan.io/ : https://sepolia.etherscan.io/address/0x8321B53ff082b2B7Bd57872131256a448c396709
+    Smart Contract Address on Sepolia testnet : 0xE4aD78DBFc4AD3Dec7B7b38Cfa4508a7636F8c49
+    https://sepolia.etherscan.io/ : https://sepolia.etherscan.io/address/0xE4aD78DBFc4AD3Dec7B7b38Cfa4508a7636F8c49
 
 */
 pragma solidity ^0.8.18;

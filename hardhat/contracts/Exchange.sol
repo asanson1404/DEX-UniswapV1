@@ -12,8 +12,8 @@
         - When user adds liquidity, they are given a LP Token that represents their share of the pool
         - Liquidity Providers must be able to burn their LP tokens to receive back ETH and XELA  
 
-    Smart Contract Address on Sepolia testnet : 0xb671ac5EE34786857F46b275B374F3Cf1Aa5e22E
-    https://sepolia.etherscan.io/ : https://sepolia.etherscan.io/address/0xb671ac5EE34786857F46b275B374F3Cf1Aa5e22E
+    Smart Contract Address on Sepolia testnet : 0xCBF972058136cce36250589cd22aE1641E31353a
+    https://sepolia.etherscan.io/ : https://sepolia.etherscan.io/address/0xCBF972058136cce36250589cd22aE1641E31353a
 
 */
 pragma solidity ^0.8.18;
@@ -81,8 +81,8 @@ contract Exchange is ERC20 {
         uint256 ethReserve  = address(this).balance;
 
         // Calculate the amount of ETH and XELA to return to the user
-        uint256 ethToReturn  = ethReserve * (amountOfLpTokens / totalLpTokenSupply);
-        uint256 xelaToReturn = xelaReserve * (amountOfLpTokens / totalLpTokenSupply);
+        uint256 ethToReturn  = (ethReserve * amountOfLpTokens) / totalLpTokenSupply;
+        uint256 xelaToReturn = (xelaReserve * amountOfLpTokens) / totalLpTokenSupply;
 
 
         // _burn() verifies that msg.sender has a sufficient amount of LP Token
