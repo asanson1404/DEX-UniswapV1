@@ -1,8 +1,9 @@
 import styles from './style.module.css';
 import Popup from 'reactjs-popup';
 import { useEffect, useState } from 'react';
-import { useAccount, useBalance, useContractRead } from 'wagmi';
-import { prepareWriteContract, writeContract, waitForTransaction } from 'wagmi/actions';
+import config from '../../wagmi.config';
+import { useAccount, useBalance, useReadContract, useBlockNumber } from 'wagmi';
+import { simulateContract, writeContract, waitForTransactionReceipt } from 'wagmi/actions';
 import { formatEther, parseEther } from 'viem'
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { roundNumber } from './Pool';
@@ -27,28 +28,32 @@ async function addLiquidity(
 
         // First approve the Exchange Contract as a spender
         // The amount of the allowance is the amount the user would like to add
-        const { request: request1 } = await prepareWriteContract({
+        const { request: request1 } = await simulateContract(config, {
             address: XelaTokenAddress,
             abi: XelaTokenABI,
             functionName: 'approve',
             args: [ExchangeAddress, parseEther(amountOfXela)],
         });
         setIsApproving(true);
-        const hash1 = await writeContract(request1);
-        await waitForTransaction(hash1);
+        const hash1 = await writeContract(config, request1);
+        await waitForTransactionReceipt(config, {
+            hash: hash1,
+        });
         setIsApproving(false);
         
         // Then add the liquidity
         setIsAdding(true);
-        const { request: request2 } = await prepareWriteContract({
+        const { request: request2 } = await simulateContract(config, {
             address: ExchangeAddress,
             abi: ExchangeABI,
             functionName: 'addLiquidity',
             args: [parseEther(amountOfXela)],
             value: parseEther(amountOfEth),
         });
-        const hash2 = await writeContract(request2);
-        await waitForTransaction(hash2);
+        const hash2 = await writeContract(config, request2);
+        await waitForTransactionReceipt(config, {
+            hash: hash2,
+        });
         setIsAdding(false);
 
         // Finally close AddLiquidity PopUp
@@ -97,6 +102,9 @@ const InfoPopUp = () => {
 
 export default function AddLiquidityComponent() {
 
+    // Listen for block number changes
+    const { data: blockNumber } = useBlockNumber({ watch: true });
+
     // Check if the users's wallet is connected or disconnected, store its address (Wagmi hooks) 
     const { address, isConnected } = useAccount();
 
@@ -107,31 +115,35 @@ export default function AddLiquidityComponent() {
     // Fetch user ETH Balance
     const ethUserBalance = useBalance({
         address: address,
-        watch: true,
     });
 
     // Fetch user XLA Balance
-    const xlaUserBalance = useContractRead({
+    const xlaUserBalance = useReadContract({
         address: XelaTokenAddress,
         abi: XelaTokenABI,
         functionName: 'balanceOf',
         args: [address],
-        watch: true,
     });
 
     // Fetch the Pool ETH Reserve
     const ethReserve = useBalance({
         address: ExchangeAddress,
-        watch: true,
     });
 
     // Fetch the Pool XLA Reserve
-    const xelaReserve = useContractRead({
+    const xelaReserve = useReadContract({
         address: ExchangeAddress,
         abi: ExchangeABI,
         functionName: 'getXelaReserve',
-        watch: true,
     });
+
+    // Refetch read data at every new blocknumber
+    useEffect(() => { 
+        ethUserBalance.refetch();
+        xlaUserBalance.refetch();
+        ethReserve.refetch();
+        xelaReserve.refetch();
+    }, [blockNumber]) 
 
     // State variable for conditional CSS
     const [ exceedXla, setExceedXla ] = useState(false);
@@ -230,10 +242,11 @@ export default function AddLiquidityComponent() {
                                         >
                                         </input>
                                         <p>XLA balance: {
-                                            xlaUserBalance.data && (
+                                            xlaUserBalance.data ? (
                                                 roundNumber(Number(formatEther(xlaUserBalance.data)))
-                                            )
-                                            }
+                                            ) : (
+                                                0
+                                            )}
                                         </p>
                                     </div>
                                 </div>
@@ -254,10 +267,11 @@ export default function AddLiquidityComponent() {
                                         >
                                         </input>
                                         <p>ETH balance: {
-                                            ethUserBalance.data && (
+                                            ethUserBalance.data ? (
                                                 roundNumber(Number(formatEther(ethUserBalance.data.value)))
-                                            )
-                                            }
+                                            ) : (
+                                                0
+                                            )}
                                         </p>
                                     </div>
                                 </div>

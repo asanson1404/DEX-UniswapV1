@@ -1,8 +1,9 @@
 import styles from './style.module.css';
 import Popup from 'reactjs-popup';
 import { useEffect, useState } from 'react';
-import { useAccount, useBalance, useContractRead } from 'wagmi';
-import { prepareWriteContract, writeContract, waitForTransaction } from 'wagmi/actions';
+import config from '../../wagmi.config';
+import { useAccount, useBalance, useReadContract, useBlockNumber } from 'wagmi';
+import { simulateContract, writeContract, waitForTransactionReceipt } from 'wagmi/actions';
 import { formatEther, parseEther } from 'viem'
 import { roundNumber } from './Pool';
 import { ExchangeAddress, ExchangeABI } from "@/constants"; 
@@ -17,14 +18,16 @@ async function removeLiquidity(
         
     try {
         // Remove the liquidity by burning the LP Token
-        const { request } = await prepareWriteContract({
+        const { request } = await simulateContract(config, {
             address: ExchangeAddress,
             abi: ExchangeABI,
             functionName: 'removeLiquidity',
             args: [parseEther(lpAmountToBurn)],
         });
-        const hash = await writeContract(request);
-        await waitForTransaction(hash);
+        const hash = await writeContract(config, request);
+        await waitForTransactionReceipt(config, {
+            hash,
+        });
         setIsRemoving(false);
 
         // Finally close AddLiquidity PopUp
@@ -41,6 +44,9 @@ async function removeLiquidity(
 
 export default function RemoveLiquidityComponent() {
 
+    // Listen for block number changes
+    const { data: blockNumber } = useBlockNumber({ watch: true });
+
     // Check if the users's wallet is connected or disconnected, store its address (Wagmi hooks) 
     const { address, isConnected } = useAccount();
 
@@ -50,33 +56,37 @@ export default function RemoveLiquidityComponent() {
     // Fetch the Pool ETH Reserve
     const ethReserve = useBalance({
         address: ExchangeAddress,
-        watch: true,
     });
 
     // Fetch the Pool XLA Reserve
-    const xelaReserve = useContractRead({
+    const xelaReserve = useReadContract({
         address: ExchangeAddress,
         abi: ExchangeABI,
         functionName: 'getXelaReserve',
-        watch: true,
     });
 
     // Fetch the lpETHXELA token hold by the user 
-    const userLpToken = useContractRead({
+    const userLpToken = useReadContract({
         address: ExchangeAddress,
         abi: ExchangeABI,
         functionName: 'balanceOf',
         args: [address],
-        watch: true,
     });
 
     // Fetch the lpETHXELA total supply
-    const totalLpToken = useContractRead({
+    const totalLpToken = useReadContract({
         address: ExchangeAddress,
         abi: ExchangeABI,
         functionName: 'totalSupply',
-        watch: true,
     });
+
+    // Refetch read data at every new blocknumber
+    useEffect(() => { 
+        ethReserve.refetch();
+        xelaReserve.refetch();
+        userLpToken.refetch();
+        totalLpToken.refetch();
+    }, [blockNumber]) 
 
     // State variable for conditional CSS
     const [ exceedLp, setExceedLp ] = useState(false);
@@ -151,7 +161,11 @@ export default function RemoveLiquidityComponent() {
                                         >
                                         </input>
                                         <p>lpETHXELA balance: {
-                                            userLpToken.data && (roundNumber(Number(formatEther(userLpToken.data))))
+                                            userLpToken.data ? (
+                                                roundNumber(Number(formatEther(userLpToken.data)))
+                                            ) : (
+                                                0
+                                            )
                                         }
                                         </p>
                                     </div>

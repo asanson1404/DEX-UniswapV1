@@ -3,12 +3,16 @@ import styles from './style.module.css';
 
 import { ExchangeAddress, ExchangeABI } from "@/constants";   
 
+import { useEffect } from "react";
 import { formatEther } from 'viem'
-import { useAccount, useBalance, useContractRead } from 'wagmi'
+import { useAccount, useBalance, useReadContract, useBlockNumber } from 'wagmi'
 import AddLiquidityComponent from "./AddLiquidity"
 import RemoveLiquidityComponent from "./RemoveLiquidity"
 
 export default function Pool() {
+
+    // Listen for block number changes
+    const { data: blockNumber } = useBlockNumber({ watch: true });
 
     // Store the address of the connected user 
     const { address } = useAccount();
@@ -16,33 +20,37 @@ export default function Pool() {
     // Fetch the ETH Reserve
     const ethReserve = useBalance({
         address: ExchangeAddress,
-        watch: true,
     });
 
     // Fetch the XLA Reserve
-    const xelaReserve = useContractRead({
+    const xelaReserve = useReadContract({
         address: ExchangeAddress,
         abi: ExchangeABI,
         functionName: 'getXelaReserve',
-        watch: true,
     });
 
     // Fetch the number of LP tokens the user owns
-    const userLpToken = useContractRead({
+    const userLpToken = useReadContract({
         address: ExchangeAddress,
         abi: ExchangeABI,
         functionName: 'balanceOf',
         args: [address],
-        watch: true,
     });
 
     // Fetch the number of LP tokens emitted
-    const totalLpToken = useContractRead({
+    const totalLpToken = useReadContract({
         address: ExchangeAddress,
         abi: ExchangeABI,
         functionName: 'totalSupply',
-        watch: true,
     });
+
+    // Refetch read data at every new blocknumber
+    useEffect(() => { 
+        ethReserve.refetch();
+        xelaReserve.refetch();
+        userLpToken.refetch();
+        totalLpToken.refetch();
+    }, [blockNumber]) 
 
     // Function which returns the user's share in the pool
     const userShare = () => {
@@ -126,5 +134,7 @@ export function roundNumber(number) {
                 if (nbDecimals === i) return number.toFixed(i);
             }
         }
+    } else {
+        return 0;
     }
 }
